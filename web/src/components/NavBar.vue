@@ -34,7 +34,7 @@
               <li><a class="dropdown-item" href="#" @click="logout">退出</a></li>
             </ul>
           </li>
-          <ul class="navbar-nav" v-else>
+          <ul class="navbar-nav" v-else-if="!$store.state.user.pulling_info">
             <li class="nav-item ">
               <router-link class="nav-link" :to="{name: 'user_account_login'}" role="button">
                 登录

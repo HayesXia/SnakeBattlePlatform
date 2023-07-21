@@ -31,6 +31,7 @@ public class RegisterServiceImpl implements RegisterService {
         }
         if (password == null || confirmedPassword == null) {
             map.put("error_message", "password cannot be empty");
+            return map;
         }
 
         username = username.trim();        //trim函数能去掉字符串首尾的空格、回车等字符
@@ -39,9 +40,9 @@ public class RegisterServiceImpl implements RegisterService {
             return map;
         }
 
-        assert password != null;
         if (password.length() == 0 || Objects.requireNonNull(confirmedPassword).length() == 0) {
-            map.put("error_message", "password canot be empty");
+            map.put("error_message", "password cannot be empty");
+            return map;
         }
 
         if (username.length() > 100) {
@@ -51,6 +52,7 @@ public class RegisterServiceImpl implements RegisterService {
 
         if (password.length() > 100 || Objects.requireNonNull(confirmedPassword).length() > 100) {
             map.put("error_message", "the length of password cannot over 100");
+            return map;
         }
 
         if (!password.equals(confirmedPassword)) {
@@ -71,7 +73,7 @@ public class RegisterServiceImpl implements RegisterService {
         User user = new User(null, username, encodedPassword, head_sculpture);
         userMapper.insert(user);
 
-        map.put("error_messsage", "success");
+        map.put("error_message", "success");
         return map;
     }
 }
