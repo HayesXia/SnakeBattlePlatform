@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class User {
     private Integer id;
     private String username;
     private String password;
-    private String head_sculpture;
-
-
+    private String photo;
+    private Integer rating;
+    private String openid;
 }

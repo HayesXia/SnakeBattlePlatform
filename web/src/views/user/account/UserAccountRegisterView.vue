@@ -24,19 +24,16 @@
 </template>
 
 <script>
-import ContentField from "@/components/ContentField";
+import ContentField from '../../../components/ContentField.vue'
 import { ref } from 'vue'
-// import { useStore } from "vuex";
-import router from "@/router/index";
+import router from '../../../router/index'
 import $ from 'jquery'
 
 export default {
-  name: "RecordIndexView",
   components: {
     ContentField
   },
   setup() {
-    // const store = useStore();
     let username = ref('');
     let password = ref('');
     let confirmedPassword = ref('');
@@ -44,7 +41,7 @@ export default {
 
     const register = () => {
       $.ajax({
-        url: "http://localhost:3000/user/account/register/",
+        url: "https://127.0.0.3000/user/account/register/",
         type: "post",
         data: {
           username: username.value,
@@ -60,7 +57,7 @@ export default {
         },
       });
     }
-    
+
     return {
       username,
       password,
@@ -74,7 +71,7 @@ export default {
 
 <style scoped>
 button {
-  width: 100%
+  width: 100%;
 }
 
 div.error-message {

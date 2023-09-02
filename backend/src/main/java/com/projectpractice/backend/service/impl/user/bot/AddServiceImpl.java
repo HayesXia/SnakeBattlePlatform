@@ -1,10 +1,11 @@
 package com.projectpractice.backend.service.impl.user.bot;
 
-import com.projectpractice.backend.controller.user.bot.AddService;
-import com.projectpractice.backend.mapper.BotMapper;
-import com.projectpractice.backend.pojo.Bot;
-import com.projectpractice.backend.pojo.User;
-import com.projectpractice.backend.service.impl.utils.UserDetailsImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.kob.backend.mapper.BotMapper;
+import com.kob.backend.pojo.Bot;
+import com.kob.backend.pojo.User;
+import com.kob.backend.service.impl.utils.UserDetailsImpl;
+import com.kob.backend.service.user.bot.AddService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +21,10 @@ public class AddServiceImpl implements AddService {
     @Autowired
     private BotMapper botMapper;
 
-
-
     @Override
     public Map<String, String> add(Map<String, String> data) {
-        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl loginUser = (UserDetailsImpl) authenticationToken.getPrincipal();
         User user = loginUser.getUser();
 
@@ -35,41 +35,46 @@ public class AddServiceImpl implements AddService {
         Map<String, String> map = new HashMap<>();
 
         if (title == null || title.length() == 0) {
-            map.put("error_message", "Title shouldn't be empty!");
+            map.put("error_message", "标题不能为空");
             return map;
         }
 
         if (title.length() > 100) {
-            map.put("error_message", "The length of tile shouldn't over 100!");
+            map.put("error_message", "标题长度不能大于100");
             return map;
         }
 
         if (description == null || description.length() == 0) {
-            description = "Lazy guy left nothing here~";
+            description = "这个用户很懒，什么也没留下~";
         }
 
-        if (description.length() > 500) {
-            map.put("error_message", "The length of description shouldn't over 500");
+        if (description.length() > 300) {
+            map.put("error_message", "Bot描述的长度不能大于300");
             return map;
         }
 
         if (content == null || content.length() == 0) {
-            map.put("error_message", "The code shouldn't be empty!");
+            map.put("error_message", "代码不能为空");
             return map;
         }
 
         if (content.length() > 10000) {
-            map.put("error_message", "The length of code shouldn't over 10000!");
+            map.put("error_message", "代码长度不能超过10000");
+            return map;
+        }
+
+        QueryWrapper<Bot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", user.getId());
+        if (botMapper.selectCount(queryWrapper) >= 10) {
+            map.put("error_message", "每个用户最多只能创建10个Bot！");
             return map;
         }
 
         Date now = new Date();
-        Bot bot = new Bot(null, user.getId(), title, description, content, 1500, now, now);
+        Bot bot = new Bot(null, user.getId(), title, description, content, now, now);
 
         botMapper.insert(bot);
-        map.put("error_message", "Success!");
-
-
+        map.put("error_message", "success");
 
         return map;
     }

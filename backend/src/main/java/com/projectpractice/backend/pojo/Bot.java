@@ -15,14 +15,12 @@ import java.util.Date;
 public class Bot {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    private Integer userId;     // 数据库中带下划线(_)的数据在映射到pojo时不能加下划线，而应改用驼峰命名法
+    private Integer userId;
     private String title;
     private String description;
     private String content;
-    private Integer rating;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date createtime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date modifytime;
-
 }
